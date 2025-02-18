@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -84,4 +85,15 @@ public class Player : MonoBehaviour
         _rigidbody.velocity = direction;
         animationHandler.Move(direction);
     }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Flappy")) // 특정 오브젝트에 닿았는지 확인
+        {
+            SceneManager.LoadScene("FlappyScene");
+        }
+    }    
+    
+
 }
