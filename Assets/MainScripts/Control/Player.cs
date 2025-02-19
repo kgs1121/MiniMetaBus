@@ -9,11 +9,8 @@ public class Player : MonoBehaviour
     protected Vector2 movementDirection = Vector2.zero;
     protected Rigidbody2D _rigidbody;
     private BoxCollider2D playerCollider;
-    public BoxCollider2D mapBoundary; // 맵 경계 콜라이더 카메라
-    public BoxCollider2D mapBoundary2; // 맵 경계 콜라이더 플레이어
+    public BoxCollider2D mapBoundary; // 맵 경계 콜라이더 플레이어
     public BoxCollider2D flappyCollider; // 미니 게임
-    private Vector2 lastPosition;
-
 
     public SpriteRenderer playerRenderer;
 
@@ -21,7 +18,8 @@ public class Player : MonoBehaviour
     protected Stat statHandler;
 
     private GameManager gameManager;
-    public int canEnter;
+
+    public int canEnter; // 1이면 미니게임 입장 0이면 입장 불가
 
     public Vector3 savedPosition;
 
@@ -45,9 +43,12 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        //PlayerPrefs.DeleteAll();
         canEnter = PlayerPrefs.GetInt("CanEnter", 1);
-        if (savedPosition != null) ReturnToSavedPosition();
+        if (savedPosition != null)
+        {
+            ReturnToSavedPosition();
+        }
+        else Debug.Log("위치 저장 안됌");
         PlayerPrefs.DeleteKey("PlayerPosX");
         PlayerPrefs.DeleteKey("PlayerPosY");
     }
@@ -139,8 +140,8 @@ public class Player : MonoBehaviour
     public void CantOverMap()
     {
         // 맵의 경계 크기를 가져옴
-        Vector2 mapMin = mapBoundary2.bounds.min;
-        Vector2 mapMax = mapBoundary2.bounds.max;
+        Vector2 mapMin = mapBoundary.bounds.min;
+        Vector2 mapMax = mapBoundary.bounds.max;
 
         // 플레이어 위치
         Vector2 playerPosition = transform.position;
