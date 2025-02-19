@@ -8,15 +8,17 @@ TagManager:
   - Flappy
   - Topground
   - Bottomground
+  - Spike
+  - Wall
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
-  - 
+  - Background
+  - DoorWall
   - 
   - 
   - 

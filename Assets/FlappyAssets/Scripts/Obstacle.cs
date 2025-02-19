@@ -48,10 +48,7 @@ public class Obstacle : MonoBehaviour
         if (!gameManager.startgame) return;
 
         FlappyPlayer player = collision.GetComponent<FlappyPlayer>();
-        if (player != null)
-        {
-            Debug.Log(gameManager.startgame);
-            gameManager.AddScore(1);
-        }
+        if (player != null) gameManager.AddScore(1);
+        
     }
 }

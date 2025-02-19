@@ -11,10 +11,12 @@ public class FlappyGameManager : MonoBehaviour
     public static FlappyGameManager Instance { get { return gameManager; } }
 
     public int currentScore = 0;
-    private int bestScore = 0;
+    public int bestScore = 0;
 
     public bool startgame = false;
     public bool checkRestartGame = false;
+
+    public List<int> bestScorelist = new List<int>();
 
     FlappyPlayer player;
     FlappyUIManager uiManager;
@@ -40,7 +42,8 @@ public class FlappyGameManager : MonoBehaviour
     {
         startgame = false;        
         uiManager.SetRestart(currentScore, bestScore);
-        uiManager.UpdateScore(0);
+
+        SaveBestScore(currentScore);
     }
 
     public void RestartGame()
@@ -103,5 +106,50 @@ public class FlappyGameManager : MonoBehaviour
             bgrounds[i].transform.position = new Vector3(gstartX + (gWidth * i), -3.8f, 0);
         }
     }
+
+
+    public void SaveBestScore(int score)
+    {
+        if (!bestScorelist.Contains(score)) // 중복 방지
+        {
+            bestScorelist.Add(score);
+        }
+
+        bestScorelist.Sort();
+        bestScorelist.Reverse(); // 내림차순 정렬 (큰 점수가 먼저 오도록)
+
+        // 상위 5개 점수만 유지
+        if (bestScorelist.Count > 5)
+        {
+            bestScorelist.RemoveAt(bestScorelist.Count - 1);
+        }
+
+        // 리스트를 문자열로 변환하여 저장
+        string scoreString = string.Join(",", bestScorelist);
+        PlayerPrefs.SetString("BestScores", scoreString);
+    }
+
+    public void LoadBestScores()
+    {
+        bestScorelist.Clear();
+        string savedScores = PlayerPrefs.GetString("BestScores", "");
+
+        if (!string.IsNullOrEmpty(savedScores))
+        {
+            string[] scoreArray = savedScores.Split(',');
+
+            foreach (string s in scoreArray)
+            {
+                if (int.TryParse(s, out int score))
+                {
+                    bestScorelist.Add(score);
+                }
+            }
+        }
+
+        bestScorelist.Sort();
+        bestScorelist.Reverse();
+    }
+
 
 }
