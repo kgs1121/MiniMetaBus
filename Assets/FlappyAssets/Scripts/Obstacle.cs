@@ -15,11 +15,14 @@ public class Obstacle : MonoBehaviour
 
     public float widthPadding = 4f;
 
+    
+
     FlappyGameManager gameManager;
 
     private void Start()
     {
         gameManager = FlappyGameManager.Instance;
+
     }
 
 
@@ -42,7 +45,13 @@ public class Obstacle : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Player player = collision.GetComponent<Player>();
-        if (player != null) gameManager.AddScore(1);
+        if (!gameManager.startgame) return;
+
+        FlappyPlayer player = collision.GetComponent<FlappyPlayer>();
+        if (player != null)
+        {
+            Debug.Log(gameManager.startgame);
+            gameManager.AddScore(1);
+        }
     }
 }

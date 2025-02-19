@@ -11,7 +11,7 @@ public class FlappyPlayer : MonoBehaviour
     public float forWardSpeed = 3.0f;
     public bool isDead = false;
     float deathCooldown = 0f;
-
+    private Vector2 initialPosition;
     bool isFlap = false;
 
     public bool godMod = false;
@@ -21,6 +21,7 @@ public class FlappyPlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        initialPosition = transform.position;  // 초기 위치 저장
         gameManager = FlappyGameManager.Instance;
 
         animator = GetComponentInChildren<Animator>();
@@ -36,18 +37,7 @@ public class FlappyPlayer : MonoBehaviour
     {
         if (isDead)
         {
-            if (deathCooldown <= 0f)
-            {
-                // 게임 재시작
-                if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
-                {
-                    gameManager.RestartGame();
-                }
-            }
-            else
-            {
-                deathCooldown -= Time.deltaTime;
-            }
+            deathCooldown -= Time.deltaTime;
         }
         else
         {
@@ -86,13 +76,19 @@ public class FlappyPlayer : MonoBehaviour
         isDead = true;
         deathCooldown = 1f;
 
-        animator.SetInteger("IsDie", 1); // 애니메이션 상태 변경
+        //animator.SetInteger("IsDie", 1); // 애니메이션 상태 변경
         //animator.SetTrigger("Die");
-        //animator.Play("die", 0, 0f); // 강제로 애니메이션 첫 프레임부터 재생
+        animator.Play("die", 0, 0f); // 강제로 애니메이션 첫 프레임부터 재생
 
         gameManager.GameOver();
-
     }
 
-    
+    public void ResetPlayer()
+    {
+        isDead = false;
+        transform.position = initialPosition;  // 초기 위치로 돌아가기
+        Flappy_rigidbody.velocity = Vector2.zero;  // 속도 초기화
+        animator.Play("flap", 0, 0f); // 강제로 애니메이션 첫 프레임부터 재생
+    }
+
 }

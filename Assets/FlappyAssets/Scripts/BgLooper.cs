@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class BgLooper : MonoBehaviour
 {
     public int numBgcount = 5;
     public int obstacleCount = 0;
@@ -11,21 +11,12 @@ public class NewBehaviourScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Obstacle[] obstacles = GameObject.FindObjectsOfType<Obstacle>();
-        obstacleLastposition = obstacles[0].transform.position;
-        obstacleCount = obstacles.Length;
-
-        for (int i = 0; i < obstacleCount; i++)
-        {
-            obstacleLastposition = obstacles[i].SetRandomPlace(obstacleLastposition, obstacleCount);
-        }
+        RandomDeploy();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //Debug.Log("Triggerd: " + collision.name);
-
-        if (collision.CompareTag("Background"))
+        if (collision.CompareTag("Background") || collision.CompareTag("Bottomground") || collision.CompareTag("Topground"))
         {
             float widthOfBgObject = ((BoxCollider2D)collision).size.x;
             Vector3 pos = collision.transform.position;
@@ -39,6 +30,19 @@ public class NewBehaviourScript : MonoBehaviour
         if (obstacle)
         {
             obstacleLastposition = obstacle.SetRandomPlace(obstacleLastposition, obstacleCount);
+        }
+    }
+
+
+    public void RandomDeploy()
+    {
+        Obstacle[] obstacles = GameObject.FindObjectsOfType<Obstacle>();
+        obstacleLastposition = obstacles[0].transform.position;
+        obstacleCount = obstacles.Length;
+
+        for (int i = 0; i < obstacleCount; i++)
+        {
+            obstacleLastposition = obstacles[i].SetRandomPlace(obstacleLastposition, obstacleCount);
         }
     }
 }
