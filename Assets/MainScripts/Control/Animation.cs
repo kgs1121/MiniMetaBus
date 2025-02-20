@@ -7,6 +7,7 @@ public class Animation : MonoBehaviour
     private static readonly int IsMoving = Animator.StringToHash("IsMove");
 
     protected Animator animator;
+
     protected virtual void Awake()
     {
         animator = GetComponentInChildren<Animator>();
@@ -16,4 +17,8 @@ public class Animation : MonoBehaviour
     {
         animator.SetBool(IsMoving, obj.magnitude > .5f);
     }
+
+
+    
+
 }

@@ -19,9 +19,9 @@ public class Player : MonoBehaviour
 
     private GameManager gameManager;
 
-    public int canEnter; // 1이면 미니게임 입장 0이면 입장 불가
+    private int canEnter; // 1이면 미니게임 입장 0이면 입장 불가
 
-    public Vector3 savedPosition;
+    private Vector3 savedPosition;
 
     private float playerWidth;
     private float playerHeight;
@@ -48,7 +48,6 @@ public class Player : MonoBehaviour
         {
             ReturnToSavedPosition();
         }
-        else Debug.Log("위치 저장 안됌");
         PlayerPrefs.DeleteKey("PlayerPosX");
         PlayerPrefs.DeleteKey("PlayerPosY");
     }
@@ -100,6 +99,7 @@ public class Player : MonoBehaviour
         CantOverMap();
     }
 
+    
 
     private void Movement(Vector2 direction)
     {

@@ -90,7 +90,8 @@ public class FlappyUIManager : MonoBehaviour
 
     public void RemovedScore()
     {
-        PlayerPrefs.DeleteAll();
+        gameManager.bestScorelist.Clear();
+        gameManager.SaveBestScore(0);
         gameManager.LoadBestScores();
     }
 

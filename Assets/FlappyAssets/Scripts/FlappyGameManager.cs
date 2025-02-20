@@ -110,7 +110,7 @@ public class FlappyGameManager : MonoBehaviour
 
     public void SaveBestScore(int score)
     {
-        if (!bestScorelist.Contains(score)) // 중복 방지
+        if (!bestScorelist.Contains(score) && score != 0) // 중복 방지
         {
             bestScorelist.Add(score);
         }
