@@ -28,12 +28,12 @@ public class Animation : MonoBehaviour
     
     public void isOnMover()
     {
-        animator.speed = 0;
+        
     }
 
     public void OutMover()
     {
-        animator.speed = 1;
+        
     }
 
 }
