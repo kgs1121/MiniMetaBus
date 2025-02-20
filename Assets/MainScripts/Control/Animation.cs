@@ -5,6 +5,7 @@ using UnityEngine;
 public class Animation : MonoBehaviour
 {
     private static readonly int IsMoving = Animator.StringToHash("IsMove");
+    private static readonly int IsMoverMoving = Animator.StringToHash("isMove");
 
     protected Animator animator;
 
@@ -19,6 +20,20 @@ public class Animation : MonoBehaviour
     }
 
 
+    public void MoverMove(Vector2 obj)
+    {
+        animator.SetBool(IsMoverMoving, obj.magnitude > .5f);
+    }
+
     
+    public void isOnMover()
+    {
+        animator.speed = 0;
+    }
+
+    public void OutMover()
+    {
+        animator.speed = 1;
+    }
 
 }

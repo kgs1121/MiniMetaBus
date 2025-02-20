@@ -28,6 +28,11 @@ public class Player : MonoBehaviour
 
     private bool isChangingScene = false;  // 씬 전환 확인
 
+    public Transform mover;
+    public bool isOnMover = false;
+    private Mover currentVehicle;  // 현재 탑승한 탑승물
+    public GameObject moverr;
+
     public Vector2 MovementDirection { get { return movementDirection; } }
 
     protected virtual void Awake()
@@ -36,6 +41,7 @@ public class Player : MonoBehaviour
         animationHandler = GetComponent<Animation>();
         statHandler = GetComponent<Stat>();
         playerCollider = GetComponent<BoxCollider2D>();
+        currentVehicle = GetComponent<Mover>();  // 탑승물 참조
 
         playerWidth = playerCollider.size.x;
         playerHeight = playerCollider.size.y;
@@ -50,8 +56,41 @@ public class Player : MonoBehaviour
         }
         PlayerPrefs.DeleteKey("PlayerPosX");
         PlayerPrefs.DeleteKey("PlayerPosY");
+        moverr.SetActive(false);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (!isOnMover)
+            {
+                animationHandler.isOnMover();
+                isOnMover = true;
+                Vector2 playerpos = transform.position;
+                playerpos.y -= 0.8f;
+                mover.transform.position = playerpos;
+                moverr.SetActive(true);
+                if (currentVehicle == null)
+                {
+                    currentVehicle = FindObjectOfType<Mover>();
+                    if (currentVehicle == null)
+                    {
+                        Debug.LogError("Mover 오브젝트를 찾을 수 없습니다!");
+                        return;
+                    }
+                }
+                currentVehicle.OnPlayerEnter(this);
+            }
+            else
+            {
+                animationHandler.OutMover();
+                isOnMover = false;
+                currentVehicle.OnPlayerExit();
+                moverr.SetActive(false);
+            }
+        }
+    }
 
 
     private void SaveCurrentPosition()
@@ -95,7 +134,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Movement(movementDirection);
+        if (!isOnMover) Movement(movementDirection);
         CantOverMap();
     }
 
@@ -136,7 +175,17 @@ public class Player : MonoBehaviour
         }
     }
 
-    
+    // 탑승물에서 내릴 때
+    public void ExitVehicle()
+    {
+        if (currentVehicle != null)
+        {
+            currentVehicle.OnPlayerExit();
+            currentVehicle = null;  // 탑승물 참조 해제
+        }
+    }
+
+
     public void CantOverMap()
     {
         // 맵의 경계 크기를 가져옴
@@ -148,7 +197,7 @@ public class Player : MonoBehaviour
 
         // 맵 경계를 넘어가지 않도록 이동 제한
         float clampedX = Mathf.Clamp(playerPosition.x, mapMin.x + playerWidth / 2, mapMax.x - playerWidth / 2);
-        float clampedY = Mathf.Clamp(playerPosition.y, mapMin.y + playerHeight / 2, mapMax.y - playerHeight / 2);
+        float clampedY = Mathf.Clamp(playerPosition.y, mapMin.y + playerHeight * 2, mapMax.y - playerHeight / 2);
 
         // 제한된 위치로 플레이어 위치를 설정
         _rigidbody.position = new Vector2(clampedX, clampedY);
